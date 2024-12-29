@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineBook - Premium Movie Experience</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #e50914;
+            --dark: #141414;
+            --light: #ffffff;
+            --gray: #808080;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('/api/placeholder/1920/1080') center/cover;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background-color: var(--primary);
+            color: var(--light);
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+        }
+
+        .features {
+            padding: 5rem 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 2rem 5%;
+            background: rgba(255, 255, 255, 0.05);
+            margin-top: 2rem;
+        }
+
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+        }
+
+        .search-bar input::placeholder {
+            color: var(--gray);
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .filter-tag:hover {
+            background: var(--primary);
+        }
+
+        /* Movies Section */
+        .movies-section {
+            padding: 4rem 5%;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .movie-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .movie-poster {
+            width: 100%;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+        }
+
+        .movie-info {
+            padding: 1rem;
+        }
+
+        .movie-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Showtimes Section */
+        .showtimes-section {
+            padding: 4rem 5%;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .location-selector select {
+            width: 100%;
+            max-width: 300px;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 5px;
+            color: var(--light);
+            margin-bottom: 2rem;
+        }
+
+        .showtime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .showtime-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .time-slots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .time-slot {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .time-slot:hover {
+            background: var(--primary);
+        }
+
+        /* Promotions Section */
+        .promotions-section {
+            padding: 4rem 5%;
+        }
+
+        .promo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .promo-card {
+            background: linear-gradient(45deg, var(--primary), #ff4b2b);
+            padding: 2rem;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .promo-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .promo-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .membership-perks {
+            margin-top: 4rem;
+        }
+
+        .perk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .perk-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .perk-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: auto;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4rem 5% 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h4 {
+            color: var(--light);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section ul li a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--gray);
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .showtime-grid,
+            .promo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">CineBook</div>
+        <div class="nav-links">
+            <a href="#movies">Movies</a>
+            <a href="#theaters">Theaters</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Book Your Perfect Movie Experience</h1>
+            <p>Choose from premium seats, latest releases, and state-of-the-art theaters. Experience movies like never before with our immersive booking platform.</p>
+            <a href="3d seats 7.html" class="cta-button">Book Now</a>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" placeholder="Search for movies, theaters, or shows...">
+                <button class="cta-button">Search</button>
+            </div>
+            <div class="filter-tags">
+                <span class="filter-tag">Action</span>
+                <span class="filter-tag">Comedy</span>
+                <span class="filter-tag">Drama</span>
+                <span class="filter-tag">Horror</span>
+                <span class="filter-tag">Family</span>
+                <span class="filter-tag">4K</span>
+                <span class="filter-tag">IMAX</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Movies Section -->
+    <section class="movies-section">
+        <h2 class="section-title">Now Showing</h2>
+        <div class="movie-grid">
+            <!-- Movie Card 1 -->
+            <div class="movie-card">
+                <img src="The Space Adventure.jpg" alt="Movie 1" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">The Space Adventure</h3>
+                    <div class="movie-meta">
+                        <span>⭐ 4.5/5</span>
+                        <span>Action</span>
+                    </div>
+                    <button class="cta-button">Book Now</button>
+                </div>
+            </div>
+            <!-- Movie Card 2 -->
+            <div class="movie-card">
+                <img src="Love in Paris.jpg" alt="Movie 2" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">Love in Paris</h3>
+                    <div class="movie-meta">
+                        <span>⭐ 4.3/5</span>
+                        <span>Romance</span>
+                    </div>
+                    <button class="cta-button">Book Now</button>
+                </div>
+            </div>
+            <!-- Movie Card 3 -->
+            <div class="movie-card">
+                <img src="The Last Stand.jpg" alt="Movie 3" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">The Last Stand</h3>
+                    <div class="movie-meta">
+                        <span>⭐ 4.7/5</span>
+                        <span>Action</span>
+                    </div>
+                    <button class="cta-button">Book Now</button>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Coming Soon</h2>
+        <div class="movie-grid">
+            <!-- Coming Soon Movie 1 -->
+            <div class="movie-card">
+                <img src="Future World.jpg" alt="Upcoming Movie 1" class="movie-poster">
+                <div class="movie-info">
+<h3 class="movie-title">Future World</h3>
+                    <div class="movie-meta">
+                        <span>Coming Dec 30</span>
+                        <span>Sci-Fi</span>
+                    </div>
+                    <button class="cta-button">Notify Me</button>
+                </div>
+            </div>
+            <!-- Coming Soon Movie 2 -->
+            <div class="movie-card">
+                <img src="Mystery Island.jpg" alt="Upcoming Movie 2" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">Mystery Island</h3>
+                    <div class="movie-meta">
+                        <span>Coming Jan 15</span>
+                        <span>Thriller</span>
+                    </div>
+                    <button class="cta-button">Notify Me</button>
+                </div>
+            </div>
+            <!-- Coming Soon Movie 3 -->
+            <div class="movie-card">
+                <img src="Comedy Night.jpg" alt="Upcoming Movie 3" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">Comedy Night</h3>
+                    <div class="movie-meta">
+                        <span>Coming Jan 20</span>
+                        <span>Comedy</span>
+                    </div>
+                    <button class="cta-button">Notify Me</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Showtimes Section -->
+    <section class="showtimes-section">
+        <h2 class="section-title">Showtimes & Locations</h2>
+        <div class="location-selector">
+            <select>
+                <option>Select your location</option>
+                <option>Downtown Multiplex</option>
+                <option>West End Cinema</option>
+                <option>Central IMAX</option>
+            </select>
+        </div>
+        <div class="showtime-grid">
+            <div class="showtime-card">
+                <h3>The Space Adventure</h3>
+                <p>Screen 1 • IMAX</p>
+                <div class="time-slots">
+                    <span class="time-slot">10:00 AM</span>
+                    <span class="time-slot">1:30 PM</span>
+                    <span class="time-slot">4:45 PM</span>
+                    <span class="time-slot">8:00 PM</span>
+                </div>
+            </div>
+            <div class="showtime-card">
+                <h3>Love in Paris</h3>
+                <p>Screen 2 • Standard</p>
+                <div class="time-slots">
+                    <span class="time-slot">11:30 AM</span>
+                    <span class="time-slot">2:30 PM</span>
+                    <span class="time-slot">5:45 PM</span>
+                    <span class="time-slot">9:00 PM</span>
+                </div>
+            </div>
+            <div class="showtime-card">
+                <h3>The Last Stand</h3>
+                <p>Screen 3 • 4K Dolby</p>
+                <div class="time-slots">
+                    <span class="time-slot">12:00 PM</span>
+                    <span class="time-slot">3:30 PM</span>
+                    <span class="time-slot">6:45 PM</span>
+                    <span class="time-slot">10:00 PM</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Promotions Section -->
+    <section class="promotions-section">
+        <h2 class="section-title">Special Offers</h2>
+        <div class="promo-grid">
+            <div class="promo-card">
+                <div class="promo-content">
+                    <h3 class="promo-title">Student Discount</h3>
+                    <p>Get 20% off on all movie tickets with valid student ID</p>
+                    <button class="cta-button">Learn More</button>
+                </div>
+            </div>
+            <div class="promo-card">
+                <div class="promo-content">
+                    <h3 class="promo-title">Family Package</h3>
+                    <p>Special pricing for family of 4 with free popcorn</p>
+                    <button class="cta-button">Book Now</button>
+                </div>
+            </div>
+            <div class="promo-card">
+                <div class="promo-content">
+                    <h3 class="promo-title">Senior Citizens</h3>
+                    <p>25% discount for senior citizens on all shows</p>
+                    <button class="cta-button">Learn More</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="membership-perks">
+            <h2 class="section-title">Membership Benefits</h2>
+            <div class="perk-grid">
+                <div class="perk-card">
+                    <i class="fas fa-ticket-alt"></i>
+                    <h3>Points on Bookings</h3>
+                    <p>Earn points on every ticket purchase</p>
+                </div>
+                <div class="perk-card">
+                    <i class="fas fa-gift"></i>
+                    <h3>Free Snacks</h3>
+                    <p>Get complimentary snacks every month</p>
+                </div>
+                <div class="perk-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>Early Access</h3>
+                    <p>Book tickets before public release</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#careers">Careers</a></li>
+                    <li><a href="#press">Press</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#help">Help Center</a></li>
+                    <li><a href="#safety">Safety Information</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Theaters</h4>
+                <ul>
+                    <li><a href="#locations">Locations</a></li>
+                    <li><a href="#premium">Premium Screens</a></li>
+                    <li><a href="#private">Private Screenings</a></li>
+                    <li><a href="#partnerships">Partner with Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect With Us</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Noble Graph. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
